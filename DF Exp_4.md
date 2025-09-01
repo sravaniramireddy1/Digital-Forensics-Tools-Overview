@@ -1,41 +1,39 @@
 
-🔹 📖 Description
+📖 Description
 
-This experiment demonstrates how to analyze an email header 📨 to identify sender details, authentication checks 🔐, and anomalies 🚨 that could indicate phishing or spoofing attempts.
+**This experiment demonstrates how to analyze an email header to identify sender details, authentication checks that could indicate phishing or spoofing attempts**.
 
 🔹 🛠️ Step-by-Step Procedure
 
 1️⃣ Access the Email Header
 
-📧 Gmail: Open the email → ⋮ (More) → Show original.
+💠 Open the gmail and Open any mail that you want to analyze 
 
-💻 Outlook: Open email → File → Properties → check Internet headers.
-
-📨 Yahoo: Open the email → ⋮ (More) → View raw message
+💠 After selecting the email click on more then click show original.
 
 <img width="1877" height="839" alt="Screenshot 2025-08-29 162219" src="https://github.com/user-attachments/assets/fa67345e-52a7-4800-9253-9f150f0a0628" />
 
- Identify Key Header Fields
+ 2️⃣ Identify Key Header Fields
 
-👤 From: Sender’s email.
+🔹 From: Sender’s email
 
-🎯 To: Recipient’s email.
+🔹 To: Recipient’s email
 
-🕒 Date: Sent time.
+🔹 Date: Time the email was sent
 
-📝 Subject: Email subject line.
+🔹 Subject: Email subject line
 
-🔄 Return-Path: Bounce-back address.
+🔹 Return-Path: Bounce-back address
 
-🌐 Received: Path of servers.
+🔹 Received: Path of servers
 
-🆔 Message-ID: Unique email ID.
+🔹 Message-ID: Unique identifier for the email
 
-✅ SPF/DKIM/DMARC: Authentication results.
+🔹 SPF/DKIM/DMARC: Authentication results.
 
 <img width="1647" height="758" alt="Screenshot 2025-08-29 162152" src="https://github.com/user-attachments/assets/f8005566-b16b-4534-baa3-58d020d1926a" />
 
-Copy the Email Header
+3️⃣ Copy the Email Header
 
 Select and copy in message header analyzer 
 
@@ -43,25 +41,17 @@ Select and copy in message header analyzer
 
 4️⃣ Analyze the ‘Received’ Fields 🌍
 
-Shows the path of email (reverse order).
+🔹 The Received field shows the path of the email in reverse order.
 
-Each entry contains:
+🔹 Each entry has: sending server IP/hostname, receiving server IP/hostname, and a timestamp.
 
-📡 Sending server hostname/IP.
+🔹 Check IPs and hostnames using WHOIS or IP lookup tools.
 
-💻 Receiving server hostname/IP.
-
-⏰ Timestamp.
-
-5️⃣ Check IP Addresses & Hostnames 🔎
-
-Use WHOIS / IP Lookup tools 🌍.
-
-Verify suspicious IPs ⚠️ and hostnames.
+🔹 Verify any suspicious IPs or hostnames.
 
 <img width="1799" height="509" alt="Screenshot 2025-08-29 162704" src="https://github.com/user-attachments/assets/435d87fd-5db5-4e33-91f6-26e2423e2117" />
 
-6️⃣ Examine SPF, DKIM, and DMARC Results 🔐
+5️⃣ Examine SPF, DKIM, and DMARC Results 🔐
 
 SPF: Confirms if sender IP is valid.
 
@@ -81,16 +71,16 @@ DMARC: Combines SPF & DKIM.
 
 ❌ Fail → Spoofing possible.
 
-7️⃣ Analyze the ‘Message-ID’ 🆔
+6️⃣ Analyze the ‘Message-ID’ 🆔
 
-Unique per email.
+🔹Message ID is unique per each email.
 
-Domain must match sender’s domain 🔗.
+🔹Domain must match sender’s domain .
 
-Mismatches → 🚨 Spoofing alert
+🔹**Mismatches in any of these leads to Spoofing alert**
+
+<img width="1811" height="734" alt="Screenshot 2025-09-01 142701" src="https://github.com/user-attachments/assets/723dddc7-a56e-451b-91db-4be7ff7d7de4" />
 
 ✅ Result
 
-Successfully extracted, analyzed, and interpreted email headers 📨, identifying sender info, verifying authentication 🔐, and detecting anomalies 🚨.
-
-
+**This experiment demonstrates how to analyze an email header to trace sender details, verify authentication (SPF, DKIM, DMARC), and detect phishing or spoofing attempts. It ensures better email security by identifying suspicious servers, domains, or tampered content.**
