@@ -1,133 +1,160 @@
-## Experiment No - 06: Use Sleuth Kit to Analyze Digital Evidence
+## **Experiment No. 06 — Digital Forensic Analysis using Sleuth Kit** ##
 
-### Description
-The **Sleuth Kit (TSK)** is a suite of command-line tools for analyzing disk images and recovering digital evidence. This guide outlines the steps to use TSK on a Windows machine for digital forensics.
+**Overview**
 
----
-
-### Step 1: Install Sleuth Kit
-
-1.  **Download Sleuth Kit:**
-    * Visit the official Sleuth Kit website or the provided Google Drive link (https://drive.google.com/drive/u/1/folders/1ilSFY7Tqn2L7AjQGhq8yJ8kixc_xTU-v) and download the latest Windows version.
-2.  **Install Sleuth Kit:**
-    * Run the installer and follow the instructions to install Sleuth Kit on your Windows machine.
+The **Sleuth Kit (TSK)**  is a versatile suite of command-line tools used in **digital forensics**.  
+It enables investigators to analyze disk images , uncover deleted files , and extract critical digital evidence  from storage devices.  
+This document walks through the complete process of using Sleuth Kit on a **Windows** system to perform forensic analysis.
 
 ---
 
-### Step 2: Acquire the Disk Image
+##  **Step 1: Installing Sleuth Kit**
 
-Before analysis, a **bit-by-bit copy** (disk image) of the storage device evidence is required.
+1. **Download the Tool:**  
+   - Head over to the official Sleuth Kit page or use this link:  
+     👉 [Download Sleuth Kit](https://drive.google.com/drive/u/1/folders/1ilSFY7Tqn2L7AjQGhq8yJ8kixc_xTU-v)  
+   - Choose the latest stable **Windows-compatible** version.
 
-1.  **Create Disk Image:**
-    * Use a forensic tool like **FTK Imager** or **dd** to create a bit-by-bit copy.
-    * Ensure the image is in a TSK-supported format, such as **.dd**, **.raw**, **.img**, or **.E01**.
-2.  **Download Files (for this exercise):**
-    * Download the following files from the Google Drive:
-        * `4Dell Latitude CPi.E01`
-        * `4Dell Latitude CPi.E02`
-
----
-
-### Step 3: Mount the Disk Image (Optional)
-
-Mounting the disk image simplifies the navigation and analysis of the file system.
-
-1.  **Mount the Image:**
-    * Use a tool like **OSFMount** to mount the image as a virtual drive on your Windows system.
-    * *Note: This step is optional but can aid in easy file system navigation.*
+2. **Installation Process:**  
+   - Run the installer and follow the setup wizard .  
+   - Once done, TSK will be ready to use on your system!
 
 ---
 
-### Step 4: Analyze the File System
+ **Step 2: Acquire the Disk Image**
 
-Use the Sleuth Kit command-line tools to examine the file system structure and locate evidence.
+Before analysis, a **forensic disk image** (a perfect bit-by-bit copy) of the device is needed.
 
-1.  **Navigate to the Sleuth Kit Directory:**
-    * Open the **Command Prompt** (cmd) and use the `cd` command to navigate to the directory where Sleuth Kit is installed (e.g., `C:\Program Files\SleuthKit\bin`).
+1. **Create Disk Image:**  
+   - Use tools like **FTK Imager**  or **`dd`** to create an exact copy.  
+   - Save it in a TSK-supported format: `.dd`, `.raw`, `.img`, or `.E01`.
 
-2.  **Identify File System Type with `fsstat`:**
-    * **Command:**
-        ```arduino
-        fsstat [image file] > filesystem_info.txt
-        ```
-    * **Purpose:** This command outputs detailed information about the file system, which is crucial for structural understanding.
-
-3.  **List Partitions with `mmls`:**
-    * **Command:**
-        ```arduino
-        mmls [image file] > partitions.txt
-        ```
-    * **Purpose:** This command lists the partitions present within the image file.
-
-4.  **Analyze File System with `fls`:**
-    * **Command:**
-        ```arduino
-        fls -r [image file] > file_list.txt
-        ```
-    * **Purpose:** The `-r` flag recursively lists files and directories in the file system, along with their metadata (inode numbers).
-
-5.  **Recover Deleted Files with `icat`:**
-    * **Command:**
-        ```css
-        icat [image file] [inode number] > [output file]
-        ```
-    * **Purpose:** To extract a specific file, replace `[inode number]` with the inode found from the `fls` output.
+2. **Sample Evidence Files:**  
+   - For this lab, download the following from the provided link:  
+      `4Dell Latitude CPi.E01`  
+      `4Dell Latitude CPi.E02`
 
 ---
 
-### Step 5: Analyze Metadata
+##  **Step 3: Mounting the Disk Image (Optional)**
 
-Extract file metadata to gain insight into a file's history, creation, and usage.
+Mounting lets you access the disk image as if it were a normal drive.
 
-1.  **View Metadata with `istat`:**
-    * **Command:**
-        ```css
-        istat [image file] [inode number] > metadata_info.txt
-        ```
-    * **Purpose:** Provides detailed information about a file, including **timestamps (MAC times)**, size, and allocation status.
+- Use **OSFMount**  to mount the image in **read-only mode**.  
+-  *Note: This is optional but helps when browsing the file system.*
 
 ---
 
-### Step 6: Timeline Analysis (Optional)
+##  **Step 4: File System Analysis with TSK**
 
-Creating a timeline of file activity is vital for reconstructing events.
+Now let’s dive into Sleuth Kit tools  to inspect the file system.
 
-1.  **Generate a Body File using `fls`:**
-    * **Command:**
-        ```css
-        fls -m / -r [image file] > body.txt
-        ```
-    * **Purpose:** Generates a **body file** (`body.txt`) containing the essential metadata (MAC times, file paths) needed for timeline analysis.
+###  Navigate to the TSK Directory
 
-2.  **Create Timeline with `mactime`:**
-    * **Command:**
-        ```css
-        mactime -b body.txt > timeline.txt
-        ```
-    * **Purpose:** Processes the body file to create a **timeline** (`timeline.txt`) sorted by the Modified, Accessed, and Changed (MAC) times of the files.
+```bash
+cd C:\Program Files (x86)\sleuthkit-4.14.0-win32\sleuthkit-4.14.0-win32\bin
+```
+ <img width="1110" height="626" alt="Screenshot 2025-10-27 192700" src="https://github.com/user-attachments/assets/f418dc0b-8624-4b00-99d6-83b81e539760" />
+
+
 
 ---
 
-### Step 7: Generate a Report
+###  Identify File System Type
 
-Document the findings by compiling all the collected data into a comprehensive report.
+```bash
+.\fsstat.exe -o 63 "C:\Users\madhi\Downloads\4Dell Latitude CPi.E01"
+```
 
-1.  **Compile the Data:**
-    * Gather all the output files (e.g., `filesystem_info.txt`, `partitions.txt`, `file_list.txt`, `metadata_info.txt`, `timeline.txt`).
-2.  **Analyze and Document:**
-    * Review the findings, highlight crucial evidence, and write a report summarizing the investigation's methodology and results.
+ *Displays key details about the file system type and structure.*
+ 
 
 ---
 
-### Step 8: Finalize and Store Evidence
+###  View Partition Layout
 
-Ensure all evidence and reports are securely managed to maintain integrity and follow the chain of custody.
+```bash
+.\mmls.exe "C:\Users\madhi\Downloads\4Dell Latitude CPi.E01"
 
-1.  **Archive Evidence:**
-    * Use a secure, verifiable method to **archive** the original disk image and the analysis results.
-2.  **Store Securely:**
-    * Store the archived data in a secure location, strictly adhering to the **chain of custody** procedures.
+```
 
-**Result**
 
-The Sleuth Kit experiment successfully analyzed the provided .E01 disk image — partitions and file system structure were identified, deleted files were recovered (using fls/icat), and detailed file metadata was extracted (fsstat/istat). A timeline was generated with mactime to reconstruct file activity, and all outputs were archived with hashes to preserve evidence integrity.
+<img width="1365" height="767" alt="Screenshot 2025-10-27 192904" src="https://github.com/user-attachments/assets/7e2d5202-8f77-4476-959e-cc09371a50b4" />
+
+ *Lists all partitions and their respective start/end addresses.*
+
+---
+
+###  List Files and Directories
+
+```bash
+.\fls.exe -o 63 "C:\Users\madhi\Downloads\4Dell Latitude CPi.E01"
+
+```
+ 
+<img width="1344" height="642" alt="Screenshot 2025-10-27 193012" src="https://github.com/user-attachments/assets/d0f4cc04-ebfa-4103-9366-d28bc90125cb" />
+
+
+
+ *Recursively lists files and folders with their inode details.*
+ 
+<img width="1365" height="719" alt="Screenshot 2025-10-27 193057" src="https://github.com/user-attachments/assets/d15705ef-7d22-484f-8898-1d15ad1331aa" />
+
+---
+
+###  Recover Deleted Files
+
+```bash
+.\icat.exe -o 63 "C:\Users\madhi\Downloads\4Dell Latitude CPi.E01" 119 > "C:\Users\madhi\Downloads\BOOTLOG_recovered.TXT"
+```
+  
+<img width="1365" height="731" alt="Screenshot 2025-10-27 193241" src="https://github.com/user-attachments/assets/ec7fdaf7-45dc-4bdd-b483-de11db3387ac" />
+
+
+ *Recovers a deleted or existing file by its inode number.*
+
+---
+
+## **Step 5: Metadata Analysis**
+
+To uncover file history and access details, view the file’s metadata.
+
+```bash
+.\istat.exe -o 63 "C:\Users\madhi\Downloads\4Dell Latitude CPi.E01" 119 > "C:\Users\madhi\Downloads\BOOTLOG_metadata.txt" 
+```
+
+ *Displays file attributes such as MAC times (Modified, Accessed, Changed), size, and allocation info.*
+
+---
+
+
+##  **Step 6: Report Generation**
+
+After completing your analysis:
+
+1. **Compile All Outputs:**  
+   Collect files like `filesystem_info.txt`, `partitions.txt`, `file_list.txt`, and `timeline.txt`.
+
+2. **Interpret and Document:**  
+   Write a clear summary  explaining your findings, methods used, and any key recovered evidence.
+
+<img width="1355" height="671" alt="Screenshot 2025-10-27 193229" src="https://github.com/user-attachments/assets/5eb5bd9c-9247-42d5-8581-cc7891fb15a7" />
+
+--- 
+
+##  **Step 7: Evidence Preservation**
+
+Ensuring the integrity of evidence is the final and most important step.
+
+1. **Archive Evidence Securely:**  
+   Use encryption  and hashing  to store your disk image and findings.
+
+2. **Maintain Chain of Custody:**  
+   Keep the evidence in a secure location following proper forensic protocols .
+
+---
+
+##  **Conclusion**
+
+Using the **Sleuth Kit (TSK)**, investigators can efficiently extract, analyze, and preserve digital evidence .  
+It remains one of the most reliable and open-source forensic toolkits for digital investigation .
