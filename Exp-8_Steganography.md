@@ -1,106 +1,153 @@
 
-
-## **Ex.No. 08 – Use Steg-Expose to Detect Hidden Data in Images**
-
-### 🎯 **Objective**
-
-To detect hidden data embedded in image files using the **StegExpose** tool and analyze them based on statistical properties.
+#  Ex.No.8 — Detect Hidden Data in Images Using StegExpose
 
 ---
 
-### 🧰 **Requirements**
+##  Aim
 
-* ☕ **Java Runtime Environment (JRE)** – Required to run StegExpose (.jar file).
-* 🧩 **StegExpose Tool** – Download from the [official GitHub repository](https://github.com/b3dk7/StegExpose).
-* 🖼️ Supported image formats – `.png`, `.jpg`, `.bmp`, etc.
+To detect hidden data in image files using **StegExpose**, a steganography analysis tool.
 
 ---
 
-### ⚙️ **Steps to Perform the Experiment**
+##  Description
 
-#### 🪄 **Step 1: Download and Set Up StegExpose**
+**StegExpose** is a Java-based forensic tool that identifies potential hidden data in images. It analyzes the **statistical properties** of image files to estimate a “suspect score,” helping investigators determine whether steganography is likely present.
 
-1. Download the **StegExpose.jar** file from GitHub.
-2. Ensure **Java** is installed on your system.
-3. Place the `.jar` file in a working folder containing your images.
+The higher the suspect score, the more probable it is that hidden data exists.
 
 ---
 
-#### 🖼️ **Step 2: Select Images for Analysis**
+##  Prerequisites
 
-Collect images that might contain hidden data (e.g., `image1.png`, `test.jpg`).
+Before starting, ensure the following software and files are prepared:
 
----
+###  Software Requirements
 
-#### 💻 **Step 3: Open Command Prompt / Terminal**
+1. **Java Development Kit (JDK 8 or higher)**
+   StegExpose is Java-based, so `java` and `javac` must be installed.
 
-Navigate to the folder containing **StegExpose.jar** and your image files.
+   **Windows:**
 
----
+   ```bash
+   choco install openjdk
+   ```
 
-#### 🧮 **Step 4: Run StegExpose on a Single Image**
+   **Ubuntu/Linux:**
+
+   ```bash
+   sudo apt update
+   sudo apt install default-jdk
+   ```
+
+   **macOS:**
+
+   ```bash
+   brew install openjdk
+   ```
+
+    Verify installation:
+
+   ```bash
+   java -version
+   javac -version
+   ```
+
+2. **Apache Commons Math Library**
+
+   * Required dependency: `commons-math3-3.1.1.jar`
+   *  Download from: `https://archive.apache.org/dist/commons/math/binaries/commons-math3-3.1.1-bin.zip`
+
+3. **StegExpose Source Code**
+
+   *  Clone or download from GitHub: `https://github.com/b3dk7/StegExpose`
+
+   ```bash
+   git clone https://github.com/b3dk7/StegExpose.git
+   ```
+
+###  Environment Setup
+
+Place all files in a single working directory (e.g., `C:\StegExpose\`) and navigate there using Command Prompt (Windows) or Terminal (Linux/macOS):
 
 ```bash
-java -jar StegExpose.jar <image_file_path>
+cd C:\StegExpose-master
 ```
 
-**Example:**
+---
+
+##  Step 1 — Compile the Source Code
+
+Compile the Java files with the required dependency:
 
 ```bash
-java -jar StegExpose.jar test_image.png
+javac -cp commons-math3-3.1.1.jar -source 1.8 -target 1.8 *.java
 ```
+
+<img width="1457" height="261" alt="image" src="https://github.com/user-attachments/assets/4727279f-5169-4044-9679-b262b204b188" />
+
+
+ Note: Ignore warnings like `RSAnalysis.java uses unchecked or unsafe operations`. Compilation is successful if `.class` files are generated.
 
 ---
 
-#### 📊 **Step 5: Analyze the Output**
-
-StegExpose gives a **suspect score** between **0 and 1**:
-
-| Score Range | Meaning                         |
-| ----------- | ------------------------------- |
-| < 0.2       | ✅ Clean (No hidden data)        |
-| 0.2 – 0.3   | ⚠️ Possibly hidden data         |
-| > 0.3       | 🚨 Likely steganography present |
-
-**Example Output:**
+##  Step 2 — Create the Executable JAR
+By using Notepad
+Create a file named `manifest.mf` in the same folder:
 
 ```
-Analyzing suspect_image.png...
-Result: 0.4
-Steganography likely present
+Main-Class: StegExpose
 ```
+<img width="1424" height="343" alt="image" src="https://github.com/user-attachments/assets/cf2c24e0-4cbe-432b-992d-dc577f49d3c5" />
 
----
 
-#### 🧰 **Step 6: Batch Analysis (Multiple Images)**
 
-To scan an entire folder:
+Build the JAR:
 
 ```bash
-java -jar StegExpose.jar <folder_path>
+jar cfm StegExpose.jar manifest.mf *.class
 ```
+
+<img width="857" height="29" alt="image" src="https://github.com/user-attachments/assets/ffa07ff7-5c2e-4c00-9e77-c8fcac97a24c" />
+
+
+You now have `StegExpose.jar` ready to use.
 
 ---
 
-#### ⚡ **Step 7: Advanced Options**
-
-To view additional options:
+##  Step 3 — Run StegExpose
 
 ```bash
-java -jar StegExpose.jar --help
+java -jar StegExpose.jar "C:\Users\99230\StegExpose\testFolder"
 ```
 
-You can modify sensitivity and output details based on your needs.
+---
+
+##  Step 4 — Example Output
+
+
+| Hidden Bytes   | Meaning                             |
+| -------------- | ----------------------------------- |
+| < 10,000       | Likely clean (no hidden data)       |
+| 10,000–100,000 | Possibly contains hidden data       |
+| > 100,000      | Highly likely steganography present |
 
 ---
 
-### 📝 **Observation**
+##  Step 5 — Analyze and Verify Results
 
-StegExpose successfully detects whether an image contains hidden data by comparing its statistical structure against normal images.
+The tool lists images with potential hidden data and estimates the approximate size. Further validation can be done using tools such as:
+
+* StegSolve
+* OpenStego
+* zsteg
+* Binwalk
 
 ---
 
-### 🧾 **Result**
+## Result
 
-The experiment demonstrates how **StegExpose** can efficiently identify images with hidden or embedded data using steganographic detection methods.
-
+*  Successfully compiled and executed StegExpose
+*  Detected images containing potential hidden data
+*  Interpreted results and exported findings
+   Hidden data in image files was successfully detected using StegExpose. 
+---
